@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Reader {
-    private static Integer readerId = 1;
+    private static Long readerId = (long)1.0;
 
-    private Integer id;
+    private Long id;
     private String name;
     private List<Book> borrowedBooks;
 
@@ -49,7 +49,7 @@ public class Reader {
     }
 
     //получаем номер id
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

@@ -1,7 +1,7 @@
 public class Book {
-    private static Integer bookId = 1;
+    private static Long bookId = (long)1.0;
 
-    private Integer id;
+    private Long id;
     private String title;
     private String author;
     private int year;
@@ -44,7 +44,7 @@ public class Book {
     }
 
     //Получение ID
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

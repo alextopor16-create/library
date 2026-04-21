@@ -70,10 +70,10 @@ public class Main {
             IO.println(tekBook.getInfo());
         }
 
-        IO.println("\nПроверка книг читателя №2:");
-        for (Book tekBook: lib1.getReaderBooks(2)) {
-            IO.println(tekBook.getInfo());
-        }
+//        IO.println("\nПроверка книг читателя №2:");
+//        for (Book tekBook: lib1.getReaderBooks(2)) {
+//            IO.println(tekBook.getInfo());
+//        }
 
         IO.println("\nПроверка LibraryUtils:");
         IO.println("Всего книг: "+LibraryUtils.totalBooks(lib1));
@@ -83,42 +83,5 @@ public class Main {
         IO.println("Топ Читатель: "+LibraryUtils.topReader(lib1).getInfo());
         IO.println("\nСписок всех книг:");
         LibraryUtils.printAllBooks(lib1);
-
-//==========================================================
-//HASHMAP
-//=========================================================
-
-        IO.println("\nHashMap:");
-        //Создаем HashMap книги
-        HashMap<Integer, Book> books=new HashMap<>();
-        books.putIfAbsent(b1.getId(),b1);
-        books.putIfAbsent(b2.getId(),b2);
-        books.putIfAbsent(b3.getId(),b3);
-        books.putIfAbsent(b4.getId(),b4);
-        books.putIfAbsent(b5.getId(),b5);
-        books.putIfAbsent(b6.getId(),b6);
-        books.putIfAbsent(b7.getId(),b7);
-        books.putIfAbsent(b8.getId(),b8);
-        IO.println("\nСписок всех книг:");
-        books.forEach((k,v)->{IO.println(v.getInfo());});
-
-        //Создаем HashMap читателей
-        HashMap<Integer, Reader> readers=new HashMap<>();
-        readers.putIfAbsent(r1.getId(),r1);
-        readers.putIfAbsent(r2.getId(),r2);
-        readers.putIfAbsent(r3.getId(),r3);
-        readers.putIfAbsent(r4.getId(),r4);
-        IO.println("\nСписок всех читателей:");
-        readers.forEach((k,v)->{IO.println(v.getInfo());});
-
-
-        //Создаем библиотеку
-        LibraryHash libHash = new LibraryHash();
-
-        //Добавляем книги в библиотеку
-        for (int i=1; i<10; i++) {
-            libHash.addBook(books.get(i));
-        }
-
     }
 }

@@ -1,20 +1,19 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Library {
-    private List<Book> books = new ArrayList<>();
-    private List<Reader> readers = new ArrayList<>();
+    private Map<Long, Book> books = new HashMap<>();
+    private Map<Long, Reader> readers = new HashMap<>();
 
     //Добавляем книгу в библиотеку
     public void addBook(Book book) {
-        books.add(book);
+        books.put(book.getId(),book);
         IO.println("Книга ID№"+book.getId()+" добавлена в библиотеку.");
     }
 
     //удаление книги из библиотеки
     public void removeBook(Book book) {
         if (!book.isBorrowed()) {//проверяем ее занятость
-            if (books.remove(book)) {//проверяем, а была ли добавлена книга в библиотеку
+            if (books.remove(book)!=null) {//проверяем, а была ли добавлена книга в библиотеку
                 IO.println("Книга ID№"+book.getId()+" удалена из библиотеки.");
             }
             else{
@@ -29,14 +28,14 @@ public class Library {
 
     //добавление читателя в библиотеку
     public void addReader(Reader reader) {
-        readers.add(reader);
+        readers.put(reader.getId(),reader);
         IO.println("Читатель ID№"+reader.getId()+" добавлен в библиотеку.");
     }
 
     //удаление читателя из библиотеки
     public void removeReader(Reader reader) {
         if (reader.getBorrowedBooks().isEmpty()) {//проверяем пусто ли у него
-            if (readers.remove(reader)){
+            if (readers.remove(reader)!=null){
                 IO.println("Читатель ID№"+reader.getId()+" удален из библиотеки.");
             }
             else{
@@ -60,12 +59,13 @@ public class Library {
     }
 
     public String infoBook(long id) {
-        for (int i=0;i<books.size();i++) {
-            if (books.get(i).getId()==id) {
-                return books.get(i).getInfo();
-            }
+        Book book = books.get(id); // Прямой поиск по ID
+
+        if (book != null) {
+            return book.getInfo();
         }
-        IO.println("Книга №"+id+" не найдена");
+
+        IO.println("Книга №" + id + " не найдена");
         return null;
     }
 
@@ -80,33 +80,33 @@ public class Library {
         return null;
     }
 
-    //відача книги
+    //выдача книги
     public boolean borrowBook(long readerId, long bookId) {
-        Book tekBook=findBook(bookId);
-        Reader tekReader=findReader(readerId);
-
-        if ((tekBook==null) && (tekReader==null)) {
-            IO.println("Книга и читатель не найлдены - выдать книгу не возможно");
+        Book tekBook = books.get(bookId);
+        Reader tekReader = readers.get(readerId); // Предполагаем, что читатели тоже в Map
+        // 1. Проверка: не найдены оба
+        if (tekBook == null && tekReader == null) {
+            IO.println("Книга и читатель не найдены - выдать книгу невозможно");
             return false;
         }
-        if (tekBook==null) {
-            IO.println("Книга не найдена - выдать книгу не возможно");
+        // 2. Проверка: не найдена книга
+        if (tekBook == null) {
+            IO.println("Книга не найдена - выдать книгу невозможно");
             return false;
         }
-        if (tekReader==null) {
-            IO.println("Читатель не найден - выдать книгу не возможно");
+        // 3. Проверка: не найден читатель
+        if (tekReader == null) {
+            IO.println("Читатель не найден - выдать книгу невозможно");
             return false;
         }
-        if (tekReader.borrowBook(tekBook)) {
-            return true;
-        }
-        return false;
+        // 4. Попытка выдать книгу (вызываем метод у найденного читателя)
+        return tekReader.borrowBook(tekBook);
     }
 
     //возврат книги
     public void returnBook(long readerId, long bookId) {
-        Reader tekReader = findReader(readerId);
-        Book tekBook = findBook(bookId);
+        Reader tekReader = readers.get(readerId);
+        Book tekBook = books.get(bookId);
 
         if (tekReader != null && tekBook != null) {
             tekReader.returnBook(tekBook);
@@ -120,24 +120,27 @@ public class Library {
     }
 
     //возврат списка книг
-    public List<Book> getAllBooks() {
-        return books;
+    public Collection<Book> getAllBooks() {
+        return books.values();
     }
 
     //возврат списка читателей
-    public List<Reader> getAllReaders() {
-        return readers;
+    public Collection<Reader> getAllReaders() {
+        return readers.values();
     }
 
     //получить список всех занятых книг
     public List<Book> getBorrowedBooks() {
         List<Book> booksIsBorroed = new ArrayList<>();
-        for (Book tekBook : books) {//проход по списку
-            if (tekBook.isBorrowed()) {
-                booksIsBorroed.add(tekBook);
-            }
-        }
-        return booksIsBorroed;
+//        for (Book tekBook : books) {//проход по списку
+//            if (tekBook.isBorrowed()) {
+//                booksIsBorroed.add(tekBook);
+//            }
+//        }
+//        return booksIsBorroed;
+        return books.values().stream()     // Получаем поток всех книг из Map
+                .filter(Book::isBorrowed)  // Фильтруем только занятые
+                .toList();
     }
 
     //получить список книг читателя
