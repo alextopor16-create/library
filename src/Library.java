@@ -49,58 +49,53 @@ public class Library {
 
     //поиск книги
     public Book findBook(long id) {
-        for (int i=0;i<books.size();i++) {
-            if (books.get(i).getId()==id) {
-                return books.get(i);
-            }
-        }
-        IO.println("Книга №"+id+" не найдена");
-        return null;
+        return books.get(id);
     }
 
     public String infoBook(long id) {
-        Book book = books.get(id); // Прямой поиск по ID
+        try {
+            return findBook(id).getInfo();
 
-        if (book != null) {
-            return book.getInfo();
+        } catch (Exception e) {
+            return ErrMsg.BOOK_NOT_FOUND.getMsg()+" ("+ErrMsg.BOOK_NOT_FOUND.getCode()+")";
         }
-
-        IO.println("Книга №" + id + " не найдена");
-        return null;
     }
 
     //поиск читателя
     public Reader findReader(long id) {
-        for (int i=0;i<readers.size();i++) {
-            if (readers.get(i).getId()==id) {
-                return readers.get(i);
-            }
-        }
-        IO.println("Читатель №"+id+" не найден");
-        return null;
+        return readers.get(id);
     }
 
     //выдача книги
     public boolean borrowBook(long readerId, long bookId) {
-        Book tekBook = books.get(bookId);
-        Reader tekReader = readers.get(readerId); // Предполагаем, что читатели тоже в Map
-        // 1. Проверка: не найдены оба
-        if (tekBook == null && tekReader == null) {
-            IO.println("Книга и читатель не найдены - выдать книгу невозможно");
+        try {
+            return readers.get(readerId).borrowBook(books.get(bookId));
+        }
+        //---->>>>
+        catch (Exception e) {
+            IO.println(ErrMsg.READER_NOT_FOUND.getMsg()+" ("+ErrMsg.READER_NOT_FOUND.getCode()+")"+e.);
             return false;
         }
-        // 2. Проверка: не найдена книга
-        if (tekBook == null) {
-            IO.println("Книга не найдена - выдать книгу невозможно");
-            return false;
-        }
-        // 3. Проверка: не найден читатель
-        if (tekReader == null) {
-            IO.println("Читатель не найден - выдать книгу невозможно");
-            return false;
-        }
-        // 4. Попытка выдать книгу (вызываем метод у найденного читателя)
-        return tekReader.borrowBook(tekBook);
+        //Book tekBook = books.get(bookId);
+        //Reader tekReader = readers.get(readerId); // Предполагаем, что читатели тоже в Map
+        //// 1. Проверка: не найдены оба
+        //if (tekBook == null && tekReader == null) {
+        //    IO.println("Книга и читатель не найдены - выдать книгу невозможно");
+        //    return false;
+        //}
+        //// 2. Проверка: не найдена книга
+        //if (tekBook == null) {
+        //    IO.println("Книга не найдена - выдать книгу невозможно");
+        //    return false;
+        //}
+        //// 3. Проверка: не найден читатель
+        //if (tekReader == null) {
+        //    IO.println("Читатель не найден - выдать книгу невозможно");
+        //    return false;
+        //}
+        //// 4. Попытка выдать книгу (вызываем метод у найденного читателя)
+        //return tekReader.borrowBook(tekBook);
+
     }
 
     //возврат книги
@@ -147,7 +142,8 @@ public class Library {
     public List<Book> getReaderBooks(int readerId) {
         Reader tekReader = findReader(readerId);
         if (tekReader != null) {
-            return tekReader.getBorrowedBooks();
+            //return tekReader.getBorrowedBooks();
+            return null;
         }
         else {
             IO.println("Читатель №"+readerId+" не найден");

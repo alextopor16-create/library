@@ -1,18 +1,18 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Reader {
     private static Long readerId = (long)1.0;
 
     private Long id;
     private String name;
-    private List<Book> borrowedBooks;
+    //private List<Book> borrowedBooks;
+    private Map<Long, Book> borrowedBooks = new HashMap<>();
 
     //Конструктор
     public Reader(String name) {
         this.id = readerId++;
         this.name = name;
-        this.borrowedBooks = new ArrayList<>();
+        this.borrowedBooks = new HashMap<>();
         IO.println("Новій читатель: "+getInfo());
     }
 
@@ -26,7 +26,7 @@ public class Reader {
             IO.println("Книга id№"+book.getId()+" занята читателем №"+book.getBorrowedBy().getId());
             return false;
         }
-        borrowedBooks.add(book);//добавляем книгу в массив
+        borrowedBooks.put(book.getId(),book);//добавляем книгу в массив
         book.borrow(this);//помечаем книгу как занятую
         IO.println("Книга №"+book.getId()+" выдана читателю №"+getId()+" и помечена как занятая");
         return true;
@@ -34,7 +34,7 @@ public class Reader {
 
     //возвращаем книгу
     public void returnBook(Book book) {
-        if (borrowedBooks.remove(book)) {//проверяем успешность удаления книги из ArreyList, если успешно - удаляем и
+        if (borrowedBooks.remove(book.getId())!=null) {//проверяем успешность удаления книги из ArreyList, если успешно - удаляем и
             book.returnBack();//вызываем возвращение книги
             IO.println("Книга №"+book.getId()+" возвращена и свободна");
         }
@@ -54,7 +54,6 @@ public class Reader {
     }
 
     //Не доделал - Список книг - пока в виде ссылок
-    public List<Book> getBorrowedBooks() {
-        return borrowedBooks;
+    public Collection<Book> getBorrowedBooks() {return borrowedBooks.values();
     }
 }

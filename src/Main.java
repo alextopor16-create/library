@@ -38,13 +38,13 @@ public class Main {
         lib1.addReader(r4);
 
         IO.println("\nПроверка поиска:");
-        IO.println("Поиск книги №4. "+lib1.infoBook(4));
-        IO.println("Поиск книги 12. "+lib1.infoBook(12));
+        IO.println("Поиск книги №4 - "+lib1.infoBook(4));
+        IO.println("Поиск книги №12 - "+lib1.infoBook(12));
         IO.println("\nПроверка выдачи:");
         if (lib1.borrowBook(2,3)){IO.println("Книга выдана успешно");}
         if (lib1.borrowBook(2,3)){IO.println("Книга выдана успешно");}
         if (lib1.borrowBook(3,3)){IO.println("Книга выдана успешно");}
-        if (lib1.borrowBook(2,5)){IO.println("Книга выдана успешно");}
+        if (lib1.borrowBook(5,5)){IO.println("Книга выдана успешно");}
         if (lib1.borrowBook(2,6)){IO.println("Книга выдана успешно");}
         if (lib1.borrowBook(2,7)){IO.println("Книга выдана успешно");}
 
