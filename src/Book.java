@@ -26,7 +26,7 @@ public class Book {
             isBorrowed = true;
             borrowedBy = reader;
             borrowCount++;
-            IO.println("Книга id№"+getId()+" выдана "+reader.getInfo());
+            IO.println("Книга №"+getId()+" - выдана: "+reader.getInfo());
         }
 
     }

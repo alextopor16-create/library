@@ -2,6 +2,7 @@ public enum ErrMsg {
     BOOK_IS_BORROWED("Book is borrowed", 400),
     BOOK_LIMIT("Reader has already 3 books", 400),
     READER_HAS_BOOKS("Reader has books", 400),
+    READER_HASNT_BOOKS("Reader hasn't books", 400),
     READER_NOT_FOUND("Reader not found", 404),
     BOOK_NOT_FOUND("Book not found", 404),
     BOOK_NOT_BORROWED("Book is not borrowed", 400),

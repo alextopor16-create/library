@@ -20,18 +20,18 @@ public class Library {
     //удаление книги из библиотеки
     public void removeBook(Book book) {
         if (!book.isBorrowed()) {//проверяем ее занятость
-            if (books.remove(book)!=null) {//проверяем, а была ли добавлена книга в библиотеку
+            try {
+                books.remove(book); //проверяем, а была ли добавлена книга в библиотеку
                 booksByYears.get(book.getYear()).remove(book);
                 authorsByNames.get(book.getAuthor()).remove(book);
                 IO.println("Книга ID№"+book.getId()+" удалена из библиотеки.");
             }
-            else{
-                IO.println("В библиотеке отстутвует книга "+book.getInfo());
+            catch (Exception e){
+                IO.println(ErrMsg.BOOK_NOT_FOUND.getMsg()+" ("+ErrMsg.BOOK_NOT_FOUND.getCode()+")");
             }
-
         }
         else {
-            IO.println("Книга ID№"+book.getId()+" у читателя, удаление невозможно.");
+            IO.println(ErrMsg.BOOK_IS_BORROWED.getMsg()+" ("+ErrMsg.BOOK_IS_BORROWED.getCode()+")");
         }
     }
 
@@ -48,11 +48,11 @@ public class Library {
                 IO.println("Читатель ID№"+reader.getId()+" удален из библиотеки.");
             }
             else{
-                IO.println("В библиотеке отстутвует читатель "+reader.getInfo());
+                IO.println(ErrMsg.READER_NOT_FOUND.getMsg()+" ("+ErrMsg.READER_NOT_FOUND.getCode()+")");
             }
         }
         else {
-            IO.println("Читатель ID№"+reader.getId()+" не сдал все книги.");
+            IO.println(ErrMsg.READER_HAS_BOOKS.getMsg()+" ("+ErrMsg.READER_HAS_BOOKS.getCode()+")");
         }
     }
 
@@ -82,44 +82,21 @@ public class Library {
         }
         //---->>>>
         catch (Exception e) {
-            IO.println(ErrMsg.READER_NOT_FOUND.getMsg()+" ("+ErrMsg.READER_NOT_FOUND.getCode()+")");
+            IO.println("Книга №"+readerId+" - "+ErrMsg.BOOK_NOT_BELONG_TO_READER.getMsg()+" ("+ErrMsg.BOOK_NOT_BELONG_TO_READER.getCode()+")");
             return false;
         }
-        //Book tekBook = books.get(bookId);
-        //Reader tekReader = readers.get(readerId); // Предполагаем, что читатели тоже в Map
-        //// 1. Проверка: не найдены оба
-        //if (tekBook == null && tekReader == null) {
-        //    IO.println("Книга и читатель не найдены - выдать книгу невозможно");
-        //    return false;
-        //}
-        //// 2. Проверка: не найдена книга
-        //if (tekBook == null) {
-        //    IO.println("Книга не найдена - выдать книгу невозможно");
-        //    return false;
-        //}
-        //// 3. Проверка: не найден читатель
-        //if (tekReader == null) {
-        //    IO.println("Читатель не найден - выдать книгу невозможно");
-        //    return false;
-        //}
-        //// 4. Попытка выдать книгу (вызываем метод у найденного читателя)
-        //return tekReader.borrowBook(tekBook);
-
     }
 
     //возврат книги
     public void returnBook(long readerId, long bookId) {
         Reader tekReader = readers.get(readerId);
         Book tekBook = books.get(bookId);
-
-        if (tekReader != null && tekBook != null) {
+        try {
             tekReader.returnBook(tekBook);
         }
-        else if (tekReader == null) {
-            IO.println("Читатель не найден - возврат невозможен");
-        }
-        else {
-            IO.println("Книга не найдена - возврат невозможен");
+        catch (Exception e) {
+            IO.println("Книга №"+readerId+" - "+ErrMsg.BOOK_NOT_FOUND.getMsg()+" ("+ErrMsg.BOOK_NOT_FOUND.getCode()+") or "+
+                    ErrMsg.READER_NOT_FOUND.getMsg()+" ("+ErrMsg.READER_NOT_FOUND.getCode()+")");
         }
     }
 
@@ -148,15 +125,15 @@ public class Library {
     }
 
     //получить список книг читателя
-    public List<Book> getReaderBooks(int readerId) {
-        Reader tekReader = findReader(readerId);
-        if (tekReader != null) {
-            //return tekReader.getBorrowedBooks();
-            return null;
+    public void getReaderBooks(Long readerId) {
+        try {
+            books.values().stream()
+                    .filter(book -> book.getBorrowedBy().getId().equals(readers.get(readerId).getId()))
+                    .forEach(book -> IO.println(book.getInfo()));
         }
-        else {
-            IO.println("Читатель №"+readerId+" не найден");
-            return null;
+        catch (Exception e) {
+            IO.println(ErrMsg.READER_NOT_FOUND.getMsg()+" ("+ErrMsg.READER_NOT_FOUND.getCode()+")");
+
         }
     }
 

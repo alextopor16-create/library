@@ -40,13 +40,15 @@ public class Main {
         IO.println("\nПроверка поиска:");
         IO.println("Поиск книги №4 - "+lib1.infoBook(4));
         IO.println("Поиск книги №12 - "+lib1.infoBook(12));
+
         IO.println("\nПроверка выдачи:");
-        if (lib1.borrowBook(2,3)){IO.println("Книга выдана успешно");}
-        if (lib1.borrowBook(2,3)){IO.println("Книга выдана успешно");}
-        if (lib1.borrowBook(3,3)){IO.println("Книга выдана успешно");}
-        if (lib1.borrowBook(5,5)){IO.println("Книга выдана успешно");}
-        if (lib1.borrowBook(2,6)){IO.println("Книга выдана успешно");}
-        if (lib1.borrowBook(2,7)){IO.println("Книга выдана успешно");}
+        lib1.borrowBook(2,3);
+        lib1.borrowBook(2,3);
+        lib1.borrowBook(3,3);
+        lib1.borrowBook(5,5);
+        lib1.borrowBook(2,6);
+        lib1.borrowBook(2,7);
+        lib1.borrowBook(2,4);
 
         IO.println("\nПроверка возврата:");
         lib1.returnBook(2,5);
@@ -70,10 +72,15 @@ public class Main {
             IO.println(tekBook.getInfo());
         }
 
-//        IO.println("\nПроверка книг читателя №2:");
-//        for (Book tekBook: lib1.getReaderBooks(2)) {
-//            IO.println(tekBook.getInfo());
-//        }
+        IO.println("\nПроверка книг читателя №3:");
+        //---------------------???
+        try {
+            lib1.getReaderBooks((long)3);
+        }
+        catch (Exception e) {
+            IO.println(ErrMsg.READER_HASNT_BOOKS.getMsg()+" ("+ErrMsg.READER_HASNT_BOOKS.getCode()+")");
+        }
+
 
         IO.println("\nПроверка LibraryUtils:");
         IO.println("Всего книг: "+LibraryUtils.totalBooks(lib1));
