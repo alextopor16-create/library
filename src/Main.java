@@ -3,14 +3,14 @@ import java.util.HashMap;
 public class Main {
     static void main() {
 
-        //Создаем книги
-        Book b1 = new Book("Три толстяка", "Олеша", 1949);
+        //Создаем книги и авторов
+        Book b1 = new Book("Три толстяка", "Гайдар", 1949);
         Book b2 = new Book("Чук и Гек", "Гайдар", 1965);
         Book b3 = new Book("Царь Салтан", "Пушкин", 1845);
-        Book b4 = new Book("Анжелика", "Маркиз де Сад", 1946);
-        Book b5 = new Book("Сказки", "Народные", 1985);
+        Book b4 = new Book("Анжелика", "Гайдар", 1946);
+        Book b5 = new Book("Сказки", "Гайдар", 1985);
         Book b6 = new Book("Квантовая механика", "КиевНаучКнига", 1968);
-        Book b7 = new Book("Море", "Наутилус", 1973);
+        Book b7 = new Book("Море", "Пушкин", 1973);
         Book b8 = new Book("Пришельцы", "Новые горизонты", 2025);
 
         //Создаем читателей
@@ -83,5 +83,14 @@ public class Main {
         IO.println("Топ Читатель: "+LibraryUtils.topReader(lib1).getInfo());
         IO.println("\nСписок всех книг:");
         LibraryUtils.printAllBooks(lib1);
+
+        IO.println("\nСписок книг автора Гайдар:");
+        lib1.getBookAuthor("Гайдар");
+        IO.println("\nСписок книг автора Пушкин:");
+        lib1.getBookAuthor("Пушкин");
+
+        IO.println("\nСписок книг c 1950 по 2000:");
+        lib1.getBooksInPeriod((long)1950,(long)2000);
     }
+
 }

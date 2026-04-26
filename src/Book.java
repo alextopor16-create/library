@@ -48,6 +48,14 @@ public class Book {
         return id;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
     //Получение занятости
     public boolean isBorrowed() {
         return isBorrowed;
